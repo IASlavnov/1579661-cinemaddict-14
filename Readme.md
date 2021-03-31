@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
-* Студент: [Игорь Славнов](https://up.htmlacademy.ru/ecmascript/14/user/1579661).
-* Наставник: `Неизвестно`.
+- Студент: [Игорь Славнов](https://up.htmlacademy.ru/ecmascript/14/user/1579661).
+- Наставник: [Сергей Рожков](https://up.htmlacademy.ru/ecmascript/14/user/1069033).
 
 ---
 
