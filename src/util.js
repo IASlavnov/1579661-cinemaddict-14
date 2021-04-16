@@ -1,21 +1,18 @@
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-
-export const getRandomFloat = (a = 1, b = 0, dec = 1) => {
+export const getRandomFloat = (a = 0, b = 1, dec = 1) => {
   const lower = Math.min(a, b);
   const upper = Math.max(a, b);
 
   return Number((lower + Math.random() * (upper - lower)).toFixed(dec));
 };
 
-export const getRandomArrayElement = (array) => array[getRandomInteger(0, array.length - 1)];
+export const getRandomInteger = (a = 0, b = 1) => {
+  return getRandomFloat(a, b, 0);
+};
 
-export const getRandomArray = (array) => {
-  const newArray = array.filter(() => Math.random() > 0.5);
-  newArray.length ? newArray : newArray.push(array[getRandomInteger(0, array.length - 1)]);
-  return newArray;
+export const getRandomArrayElement = (data) => data[getRandomInteger(0, data.length - 1)];
+
+export const getRandomArray = (data) => {
+  const newData = data.filter(() => Math.random() > 0.5);
+  newData.length ? newData : newData.push(data[getRandomInteger(0, data.length - 1)]);
+  return newData;
 };

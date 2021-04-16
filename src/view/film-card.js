@@ -5,10 +5,6 @@ export const createFilmCardTemplate = (film) => {
 
   const MAX_DESCRIPTION_LENGTH = 140;
 
-  const cutDescription = (description) => {
-    return description.split('').slice(0, 139).join('') + '...';
-  };
-
   const setActiveClass = (flag) => {
     return flag ? 'film-card__controls-item--active' : '';
   };
@@ -22,7 +18,7 @@ export const createFilmCardTemplate = (film) => {
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-    <p class="film-card__description">${description.length > MAX_DESCRIPTION_LENGTH ? cutDescription(description) : description}</p>
+    <p class="film-card__description">${description.length > MAX_DESCRIPTION_LENGTH ? description.substring(0, MAX_DESCRIPTION_LENGTH - 1) + '...' : description}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${setActiveClass(watchlist)}" type="button">Add to watchlist</button>
