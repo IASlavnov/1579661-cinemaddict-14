@@ -1,4 +1,6 @@
-export const createContentTemplate = () => {
+import {createElement} from '../util.js';
+
+const createContentTemplate = () => {
   return `<section class="films">
     <section class="films-list">
       <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
@@ -19,3 +21,25 @@ export const createContentTemplate = () => {
     </section>
   </section>`;
 };
+
+export default class Content {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createContentTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
