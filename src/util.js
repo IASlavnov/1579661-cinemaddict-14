@@ -1,3 +1,15 @@
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+export const renderElement = (container, element) => container.append(element);
+
+export const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
 export const getRandomFloat = (a = 0, b = 1, dec = 1) => {
   const lower = Math.min(a, b);
   const upper = Math.max(a, b);

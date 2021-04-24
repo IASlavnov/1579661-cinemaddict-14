@@ -1,16 +1,17 @@
 import {createElement} from '../util.js';
 
-const createShowMoreTemplate = () => {
-  return '<button class="films-list__show-more">Show more</button>';
+const createSiteFooterTemplate = (films) => {
+  return `<p>${films} movies inside</p>`;
 };
 
-export default class ShowMore {
-  constructor() {
+export default class Footer {
+  constructor(count) {
+    this._count = count;
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreTemplate();
+    return createSiteFooterTemplate(this._count);
   }
 
   getElement() {
