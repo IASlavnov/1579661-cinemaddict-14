@@ -2,6 +2,7 @@ import UserRatingView from './view/user-rating.js';
 import SiteMenuView from './view/site-menu.js';
 import SortView from './view/sort.js';
 import ContentView from './view/content.js';
+import EmptyContentView from './view/content-empty.js';
 import FilmCardView from './view/film-card.js';
 import ShowMoreView from './view/show-more.js';
 import FooterStatisticsView from './view/footer-statistics.js';
@@ -58,13 +59,24 @@ const renderPopup = (film) => {
   const closePopup = () => {
     popup.getElement().remove();
     bodyElement.classList.remove('hide-overflow');
+    document.removeEventListener('keydown', onPopupEscKeydown);
+  };
+
+  const onPopupEscKeydown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      closePopup();
+    }
   };
 
   renderElement(mainElement, popup.getElement());
   bodyElement.classList.add('hide-overflow');
+
   popup.getElement().querySelector('.film-details__close-btn').addEventListener('click', () => {
     closePopup();
   });
+
+  document.addEventListener('keydown', onPopupEscKeydown);
 };
 
 const renderFilmCard = (container, film) => {
@@ -84,7 +96,9 @@ const renderFilmCard = (container, film) => {
 };
 
 const renderContent = () => {
-  renderElement(mainElement, new ContentView().getElement());
+  films.length ?
+    renderElement(mainElement, new ContentView().getElement()) :
+    renderElement(mainElement, new EmptyContentView().getElement());
 
   const filmsList = document.querySelector('.films-list');
   const filmsContainerAllMovies = document.querySelector('.films-list .films-list__container');
