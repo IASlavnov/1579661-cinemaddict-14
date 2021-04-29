@@ -1,13 +1,34 @@
+import AbstractView from './view/abstract.js';
+
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export const renderElement = (container, element) => container.append(element);
+export const renderElement = (container, element) => {
+  if (container instanceof AbstractView) {
+    container = container.getElement();
+  }
+
+  if (element instanceof AbstractView) {
+    element = element.getElement();
+  }
+
+  container.append(element);
+};
 
 export const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;
   return newElement.firstChild;
+};
+
+export const remove = (element) => {
+  if (!(element instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  element.getElement().remove();
+  element.removeElement();
 };
 
 export const getRandomFloat = (a = 0, b = 1, dec = 1) => {
