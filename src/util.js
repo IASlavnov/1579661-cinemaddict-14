@@ -4,7 +4,7 @@ export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export const renderElement = (container, element) => {
+export const render = (container, element) => {
   if (container instanceof AbstractView) {
     container = container.getElement();
   }
@@ -20,6 +20,24 @@ export const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;
   return newElement.firstChild;
+};
+
+export const replace = (newChild, oldChild) => {
+  if (newChild instanceof AbstractView) {
+    newChild = newChild.getElement();
+  }
+
+  if (oldChild instanceof AbstractView) {
+    oldChild = oldChild.getElement();
+  }
+
+  const parent = oldChild.parentElement;
+
+  if (parent === null || oldChild === null || newChild === null) {
+    throw new Error('Can\'t replace unexisting elements');
+  }
+
+  parent.replaceChild(newChild, oldChild);
 };
 
 export const remove = (element) => {
@@ -48,4 +66,18 @@ export const getRandomArray = (data) => {
   const newData = data.filter(() => Math.random() > 0.5);
   newData.length ? newData : newData.push(data[getRandomInteger(0, data.length - 1)]);
   return newData;
+};
+
+export const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
 };

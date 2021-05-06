@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {getRandomInteger, getRandomFloat, getRandomArrayElement, getRandomArray} from '../util.js';
 import {generateComment} from './comment.js';
 import {TITLES, POSTERS, PEOPLE, COUNTRIES, GENRES, DESCRIPTION, MAX_DESCRIPTION_LENGTH, FilmDuration} from './const.js';
@@ -35,6 +36,7 @@ export const generateFilm = () => {
   const alreadyWatched = Boolean(getRandomInteger());
 
   return {
+    id: nanoid(),
     comments : new Array(getRandomInteger(AmountComments.MIN_COMMENTS, AmountComments.MAX_COMMENTS))
       .fill()
       .map(() => generateComment()),
