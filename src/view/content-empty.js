@@ -8,7 +8,7 @@ const createEmptyContentTemplate = () => {
   </section> `;
 };
 
-export default class ContentEmpty extends AbstractView {
+export default class ContentEmptyView extends AbstractView {
   getTemplate() {
     return createEmptyContentTemplate();
   }

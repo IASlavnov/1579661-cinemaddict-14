@@ -7,7 +7,7 @@ const createUserRatingTemplate = () => {
   </section>`;
 };
 
-export default class UserRating extends AbstractView {
+export default class UserRatingView extends AbstractView {
   getTemplate() {
     return createUserRatingTemplate();
   }

@@ -4,7 +4,7 @@ const createSiteFooterTemplate = (films) => {
   return `<p>${films} movies inside</p>`;
 };
 
-export default class Footer extends AbstractView {
+export default class FooterView extends AbstractView {
   constructor(count) {
     super();
     this._count = count;
