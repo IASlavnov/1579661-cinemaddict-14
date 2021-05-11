@@ -7,7 +7,7 @@ const Mode = {
   POPUP: 'POPUP',
 };
 
-export default class Film {
+export default class FilmPresenter {
   constructor(container, changeData, changeMode) {
     this._container = container;
     this._changeData = changeData;
@@ -18,12 +18,12 @@ export default class Film {
     this._mode = Mode.DEFAULT;
     this._bodyElement = document.body;
 
-    this._handleShowPopupClick = this._handleShowPopupClick.bind(this);
+    this._showPopupHandler = this._showPopupHandler.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
-    this._handleClosePopupClick = this._handleClosePopupClick.bind(this);
-    this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
-    this._handleWatchedClick = this._handleWatchedClick.bind(this);
-    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._closePopupHandler = this._closePopupHandler.bind(this);
+    this._clickWatchlistHandler = this._clickWatchlistHandler.bind(this);
+    this._clickWatchedHandler = this._clickWatchedHandler.bind(this);
+    this._clickFavoriteHandler = this._clickFavoriteHandler.bind(this);
   }
 
   init(film) {
@@ -32,10 +32,10 @@ export default class Film {
     const prevFilmCardComponent = this._filmCardComponent;
 
     this._filmCardComponent = new FilmCardView(this._film);
-    this._filmCardComponent.setShowPopupHandler(this._handleShowPopupClick);
-    this._filmCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmCardComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._filmCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._filmCardComponent.setShowPopupHandler(this._showPopupHandler);
+    this._filmCardComponent.setWatchlistClickHandler(this._clickWatchlistHandler);
+    this._filmCardComponent.setWatchedClickHandler(this._clickWatchedHandler);
+    this._filmCardComponent.setFavoriteClickHandler(this._clickFavoriteHandler);
 
     if (prevFilmCardComponent === null) {
       render(this._container, this._filmCardComponent);
@@ -49,9 +49,12 @@ export default class Film {
     remove(prevFilmCardComponent);
   }
 
+  getFilm() {
+    return this._film;
+  }
+
   destroy() {
     remove(this._filmCardComponent);
-    // remove(this._popupComponent); ?
   }
 
   _renderPopup() {
@@ -61,10 +64,10 @@ export default class Film {
     const prevPopupComponent = this._popupComponent;
 
     this._popupComponent = new PopupView(this._film);
-    this._popupComponent.setClosePopupHandler(this._handleClosePopupClick);
-    this._popupComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._popupComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._popupComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+    this._popupComponent.setClosePopupHandler(this._closePopupHandler);
+    this._popupComponent.setWatchlistClickHandler(this._clickWatchlistHandler);
+    this._popupComponent.setWatchedClickHandler(this._clickWatchedHandler);
+    this._popupComponent.setFavoriteClickHandler(this._clickFavoriteHandler);
 
     if (prevPopupComponent === null) {
       render(this._bodyElement, this._popupComponent);
@@ -98,7 +101,7 @@ export default class Film {
     }
   }
 
-  _handleShowPopupClick() {
+  _showPopupHandler() {
     this._renderPopup();
   }
 
@@ -109,21 +112,21 @@ export default class Film {
     }
   }
 
-  _handleClosePopupClick() {
+  _closePopupHandler() {
     this._closePopup();
   }
 
-  _handleWatchlistClick() {
+  _clickWatchlistHandler() {
     const updatedUserDetails = Object.assign({}, this._film.userDetails, {watchlist: !this._film.userDetails.watchlist});
     this._changeData(Object.assign({}, this._film, {userDetails: updatedUserDetails}));
   }
 
-  _handleWatchedClick() {
+  _clickWatchedHandler() {
     const updatedUserDetails = Object.assign({}, this._film.userDetails, {alreadyWatched: !this._film.userDetails.alreadyWatched});
     this._changeData(Object.assign({}, this._film, {userDetails: updatedUserDetails}));
   }
 
-  _handleFavoriteClick() {
+  _clickFavoriteHandler() {
     const updatedUserDetails = Object.assign({}, this._film.userDetails, {favorite: !this._film.userDetails.favorite});
     this._changeData(Object.assign({}, this._film, {userDetails: updatedUserDetails}));
   }

@@ -143,7 +143,7 @@ const createPopupTemplate = (film) => {
   </section>`;
 };
 
-export default class Popup extends AbstractView {
+export default class PopupView extends AbstractView {
   constructor(film) {
     super();
     this._film = film;

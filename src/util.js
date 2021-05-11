@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import AbstractView from './view/abstract.js';
 
 export const renderTemplate = (container, template, place) => {
@@ -48,6 +49,12 @@ export const remove = (element) => {
   element.getElement().remove();
   element.removeElement();
 };
+
+export const sortByDate = (a, b) => dayjs(b.filmInfo.release.date).diff(dayjs(a.filmInfo.release.date));
+
+export const sortByRating = (a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating;
+
+export const sortByComments = (a, b) => b.comments.length - a.comments.length;
 
 export const getRandomFloat = (a = 0, b = 1, dec = 1) => {
   const lower = Math.min(a, b);
