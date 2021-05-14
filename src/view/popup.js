@@ -1,4 +1,4 @@
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 
 const renderComments = (comments) => {
   return comments
@@ -24,6 +24,8 @@ const createPopupTemplate = (film) => {
   const {title, alternativeTitle, totalRating, poster, ageRating, director, writers, actors, release, runtime, genre, description} = film.filmInfo;
   const {watchlist, alreadyWatched, favorite} = film.userDetails;
   const comments = film.comments;
+  const emoji = film.emoji;
+  const comment = film.comment;
 
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -109,10 +111,10 @@ const createPopupTemplate = (film) => {
           </ul>
 
           <div class="film-details__new-comment">
-            <div class="film-details__add-emoji-label"></div>
+            <div class="film-details__add-emoji-label">${emoji ?  `<img src="images/emoji/${emoji}.png" width="55" height="55" alt="emoji-${emoji}">` : ''}</div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${comment ? comment : ''}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -143,18 +145,47 @@ const createPopupTemplate = (film) => {
   </section>`;
 };
 
-export default class PopupView extends AbstractView {
+export default class PopupView extends SmartView {
   constructor(film) {
     super();
-    this._film = film;
+    this._data = PopupView.parseFilmToData(film);
+
     this._closePopupHandler = this._closePopupHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._changeEmojiHandler = this._changeEmojiHandler.bind(this);
+    this._changeInputHandler = this._changeInputHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createPopupTemplate(this._film);
+    return createPopupTemplate(this._data);
+  }
+
+  static parseFilmToData(film) {
+    return Object.assign(
+      {},
+      film,
+      {
+        emoji: null,
+        comment: '',
+      },
+    );
+  }
+
+  static parseDataToFilm(data) {
+    data = Object.assign({}, data);
+
+    delete data.emoji;
+    delete data.comment;
+
+    return data;
+  }
+
+  reset(filmCard) {
+    this.updateData(PopupView.parseFilmToData(filmCard));
   }
 
   _closePopupHandler(evt) {
@@ -172,6 +203,22 @@ export default class PopupView extends AbstractView {
 
   _favoriteClickHandler() {
     this._callback.favoriteClick();
+  }
+
+  _changeEmojiHandler(evt) {
+    this.updateData({emoji: evt.target.value});
+  }
+
+  _changeInputHandler(evt) {
+    this.updateData({comment: evt.target.value}, true);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelectorAll('.film-details__emoji-item')
+      .forEach((element) => {
+        element.addEventListener('change', this._changeEmojiHandler);
+      });
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._changeInputHandler);
   }
 
   setClosePopupHandler(callback) {
@@ -192,5 +239,13 @@ export default class PopupView extends AbstractView {
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
     this.getElement().querySelector('#favorite').addEventListener('click', this._favoriteClickHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setClosePopupHandler(this._callback.closePopup);
+    this.setWatchlistClickHandler(this._callback.watchlistClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
   }
 }

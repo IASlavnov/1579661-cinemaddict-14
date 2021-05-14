@@ -87,6 +87,7 @@ export default class FilmPresenter {
 
   _closePopup() {
     if (this._mode !== Mode.DEFAULT) {
+      this._popupComponent.reset(this._film);
       this._popupComponent.getElement().remove();
       this._bodyElement.classList.remove('hide-overflow');
       this._popupComponent = null;
