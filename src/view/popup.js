@@ -151,7 +151,6 @@ export default class PopupView extends SmartView {
     this._data = PopupView.parseFilmToData(film);
 
     this._closePopupHandler = this._closePopupHandler.bind(this);
-    // this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
     this._watchedClickHandler = this._watchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
