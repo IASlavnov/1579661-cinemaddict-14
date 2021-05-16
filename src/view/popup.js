@@ -1,4 +1,5 @@
 import SmartView from './smart.js';
+import {getDuration, getCommentDate, getFormatDate} from '../util.js';
 
 const renderComments = (comments) => {
   return comments
@@ -11,7 +12,7 @@ const renderComments = (comments) => {
       <p class="film-details__comment-text">${comment.comment}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${comment.author}</span>
-        <span class="film-details__comment-day">${comment.date}</span>
+        <span class="film-details__comment-day">${getCommentDate(comment.date)}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
@@ -67,11 +68,11 @@ const createPopupTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${release.date}</td>
+                <td class="film-details__cell">${getFormatDate(release.date)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${runtime}</td>
+                <td class="film-details__cell">${getDuration(runtime)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

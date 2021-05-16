@@ -1,5 +1,9 @@
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import AbstractView from './view/abstract.js';
+
+const MINUTES_PER_HOUR = 60;
+const DATE_FORMAT = 'DD MMMM YYYY';
 
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -88,3 +92,16 @@ export const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
+export const getDuration = (duration) => {
+  return Math.floor(duration / MINUTES_PER_HOUR) ?
+    `${Math.floor(duration / MINUTES_PER_HOUR)}h ${duration % MINUTES_PER_HOUR}m` :
+    `${duration % MINUTES_PER_HOUR}m`;
+};
+
+export const getCommentDate = (date) => {
+  dayjs.extend(relativeTime);
+  return dayjs(date).fromNow();
+};
+
+export const getFormatDate = (date) => dayjs(date).format(DATE_FORMAT);
