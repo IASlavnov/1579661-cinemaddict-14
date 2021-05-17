@@ -4,8 +4,6 @@ import {getRandomInteger, getRandomFloat, getRandomArrayElement, getRandomArray}
 import {generateComment} from './comment.js';
 import {TITLES, POSTERS, PEOPLE, COUNTRIES, GENRES, DESCRIPTION, MAX_DESCRIPTION_LENGTH, FilmDuration} from './const.js';
 
-const MINUTES_PER_HOUR = 60;
-const DATE_FORMAT = 'DD MMMM YYYY';
 const FIRST_INDEX = 0;
 
 const AmountComments = {
@@ -21,14 +19,6 @@ const TotalRating = {
 const AgeRating = {
   MIN_AGE: 0,
   MAX_AGE: 18,
-};
-
-const getDuration = () => {
-  const duration = getRandomInteger(FilmDuration.MIN_DURATION, FilmDuration.MAX_DURATION);
-
-  return Math.floor(duration / MINUTES_PER_HOUR) ?
-    `${Math.floor(duration / MINUTES_PER_HOUR)}h ${duration % MINUTES_PER_HOUR}m` :
-    `${duration % MINUTES_PER_HOUR}m`;
 };
 
 export const generateFilm = () => {
@@ -50,17 +40,17 @@ export const generateFilm = () => {
       writers: getRandomArray(PEOPLE),
       actors: getRandomArray(PEOPLE),
       release: {
-        date: dayjs().format(DATE_FORMAT),
+        date: dayjs(),
         releaseCountry: getRandomArrayElement(COUNTRIES),
       },
-      runtime: getDuration(),
+      runtime: getRandomInteger(FilmDuration.MIN_DURATION, FilmDuration.MAX_DURATION),
       genre: getRandomArray(GENRES),
       description: getRandomArray(DESCRIPTION).slice(FIRST_INDEX, MAX_DESCRIPTION_LENGTH).join(' '),
     },
     userDetails: {
       watchlist: Boolean(getRandomInteger()),
       alreadyWatched,
-      watchingDate: alreadyWatched ? dayjs().format(DATE_FORMAT) : null,
+      watchingDate: alreadyWatched ? dayjs() : null,
       favorite: Boolean(getRandomInteger()),
     },
   };
