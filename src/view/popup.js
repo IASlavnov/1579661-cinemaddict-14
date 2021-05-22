@@ -1,15 +1,18 @@
 import SmartView from './smart.js';
 import {getDuration, getCommentDate, getFormatDate} from '../util.js';
+import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
+import he from 'he';
 
 const renderComments = (comments) => {
   return comments
     .map((comment) => {
-      return `<li class="film-details__comment">
+      return `<li class="film-details__comment" data-id="${comment.id}">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
     </span>
     <div>
-      <p class="film-details__comment-text">${comment.comment}</p>
+      <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${comment.author}</span>
         <span class="film-details__comment-day">${getCommentDate(comment.date)}</span>
@@ -150,6 +153,7 @@ export default class PopupView extends SmartView {
   constructor(film) {
     super();
     this._data = PopupView.parseFilmToData(film);
+    this._id = film.id;
 
     this._closePopupHandler = this._closePopupHandler.bind(this);
     this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
@@ -157,6 +161,8 @@ export default class PopupView extends SmartView {
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._changeEmojiHandler = this._changeEmojiHandler.bind(this);
     this._changeInputHandler = this._changeInputHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -214,6 +220,38 @@ export default class PopupView extends SmartView {
     this.updateData({comment: evt.target.value}, true);
   }
 
+  _deleteCommentHandler(evt) {
+    if (evt.target.matches('.film-details__comment-delete')) {
+      const id = evt.target.closest('.film-details__comment').dataset.id;
+      const currentComments = this._data.comments.slice().filter((item) => {
+        return item.id !== id;
+      });
+      this.updateData({
+        comments: currentComments,
+      });
+      this._callback.deleteComment(evt, id);
+    }
+  }
+
+  _addCommentHandler(evt) {
+    if ((evt.ctrlKey || evt.metaKey) && evt.key === 'Enter') {
+      const newComment = {
+        id: nanoid(),
+        date: dayjs(),
+        comment: this._data.comment,
+        emotion: this._data.emoji,
+        author: 'user',
+      };
+
+      this._callback.addComment(newComment);
+
+      this.updateData({
+        emoji: null,
+        comment: '',
+      }, true);
+    }
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelectorAll('.film-details__emoji-item')
       .forEach((element) => {
@@ -242,11 +280,22 @@ export default class PopupView extends SmartView {
     this.getElement().querySelector('#favorite').addEventListener('click', this._favoriteClickHandler);
   }
 
+  setDeleteCommentHandler(callback) {
+    this._callback.deleteComment = callback;
+    this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._deleteCommentHandler);
+  }
+
+  setAddCommentHandler(callback) {
+    this._callback.addComment = callback;
+    document.addEventListener('keydown', this._addCommentHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setClosePopupHandler(this._callback.closePopup);
     this.setWatchlistClickHandler(this._callback.watchlistClick);
     this.setWatchedClickHandler(this._callback.watchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setDeleteCommentHandler(this._callback.deleteComment);
   }
 }
