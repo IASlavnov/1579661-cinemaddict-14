@@ -4,6 +4,7 @@ import AbstractView from './view/abstract.js';
 
 const MINUTES_PER_HOUR = 60;
 const DATE_FORMAT = 'DD MMMM YYYY';
+const YEAR_FORMAT = 'YYYY';
 
 export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -46,6 +47,10 @@ export const replace = (newChild, oldChild) => {
 };
 
 export const remove = (element) => {
+  if (element === null) {
+    return;
+  }
+
   if (!(element instanceof AbstractView)) {
     throw new Error('Can remove only components');
   }
@@ -79,20 +84,6 @@ export const getRandomArray = (data) => {
   return newData;
 };
 
-export const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 export const getDuration = (duration) => {
   return Math.floor(duration / MINUTES_PER_HOUR) ?
     `${Math.floor(duration / MINUTES_PER_HOUR)}h ${duration % MINUTES_PER_HOUR}m` :
@@ -105,3 +96,5 @@ export const getCommentDate = (date) => {
 };
 
 export const getFormatDate = (date) => dayjs(date).format(DATE_FORMAT);
+
+export const getFormatYearDate = (date) => dayjs(date).format(YEAR_FORMAT);
