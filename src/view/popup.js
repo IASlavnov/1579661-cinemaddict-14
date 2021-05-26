@@ -290,6 +290,10 @@ export default class PopupView extends SmartView {
     document.addEventListener('keydown', this._addCommentHandler);
   }
 
+  removeAddCommentHandler() {
+    document.removeEventListener('keydown', this._addCommentHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setClosePopupHandler(this._callback.closePopup);

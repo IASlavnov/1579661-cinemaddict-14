@@ -97,6 +97,7 @@ export default class FilmPresenter {
       this._popupComponent.reset(this._film);
       this._popupComponent.getElement().remove();
       this._bodyElement.classList.remove('hide-overflow');
+      this._popupComponent.removeAddCommentHandler();
       this._popupComponent = null;
       document.removeEventListener('keydown', this._escKeyDownHandler);
       this._mode = Mode.DEFAULT;
@@ -164,6 +165,7 @@ export default class FilmPresenter {
       updatedFilm,
     );
 
+    this._popupComponent.removeAddCommentHandler();
     this._renderPopup();
   }
 }
