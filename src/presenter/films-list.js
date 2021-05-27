@@ -35,13 +35,13 @@ export default class FilmsListPresenter {
     this._changeModeHandler = this._changeModeHandler.bind(this);
     this._showMoreButtonHandler = this._showMoreButtonHandler.bind(this);
     this._changeSortTypeHandler = this._changeSortTypeHandler.bind(this);
-
-    this._filmsModel.addObserver(this._eventModelHandler);
-    this._filterModel.addObserver(this._eventModelHandler);
   }
 
   init() {
     this._renderBoard();
+
+    this._filmsModel.addObserver(this._eventModelHandler);
+    this._filterModel.addObserver(this._eventModelHandler);
   }
 
   _getFilms() {
@@ -165,6 +165,15 @@ export default class FilmsListPresenter {
     if (filmsCount > this._renderedFilmsCount) {
       this._renderShowMoreButton();
     }
+  }
+
+  destroy() {
+    this._clearBoard({resetRenderedFilmsCount: true, resetSortType: true});
+
+    remove(this._contentComponent);
+
+    this._filmsModel.removeObserver(this._eventModelHandler);
+    this._filterModel.removeObserver(this._eventModelHandler);
   }
 
   _actionViewHandler(updateType, update) {
